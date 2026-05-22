@@ -1,0 +1,922 @@
+:root {
+  --color-bg: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #141414;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.55);
+  --color-text-faint: rgba(255, 255, 255, 0.35);
+  --color-accent: #ffffff;
+  --color-accent-text: #000000;
+  --color-warning: rgba(255, 180, 100, 0.85);
+  --color-error: rgba(255, 100, 100, 0.9);
+  --color-glass: rgba(0, 0, 0, 0.55);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-active: rgba(255, 255, 255, 0.12);
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, monospace;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --header-height: 48px;
+  --sidebar-width: 380px;
+  --transition: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow: hidden;
+  height: 100%;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Native selects & date pickers (dark monochrome) ── */
+
+select,
+input[type="date"],
+input[type="datetime-local"] {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-surface-elevated);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='rgba(255,255,255,0.55)' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+  background-size: 0.55rem;
+  color: var(--color-text);
+  cursor: pointer;
+  padding-right: 1.75rem;
+}
+
+select:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+select:focus-visible,
+input[type="date"]:focus-visible,
+input[type="datetime-local"]:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 1px;
+}
+
+select option,
+select optgroup {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
+select option:checked {
+  background-color: #222222;
+  color: var(--color-text);
+}
+
+select option:disabled,
+select option[value=""] {
+  color: var(--color-text-muted);
+}
+
+input[type="date"],
+input[type="datetime-local"] {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.55);
+  cursor: pointer;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Header ── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--header-height);
+  min-height: var(--header-height);
+  padding: 0 1.5rem;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-header h1 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.header-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.header-controls select {
+  margin-left: 0.5rem;
+  padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.link-btn {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-muted);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.link-btn:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Layout ── */
+
+.app-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-main > * {
+  min-height: 0;
+}
+
+/* ── Sidebar ── */
+
+.sidebar {
+  position: relative;
+  width: var(--sidebar-width);
+  min-width: 0;
+  overflow: visible;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 1.25rem 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar--collapsed {
+  width: 2.75rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.sidebar-content > * + * {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.sidebar--collapsed .sidebar-content {
+  display: none;
+}
+
+.sidebar--collapsed::after {
+  content: "Mission";
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: center center;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.sidebar > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ── Scene panel ── */
+
+.scene-panel {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  contain: strict;
+}
+
+.scene-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.scene-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.scene-overlay {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.scene-overlay > * {
+  pointer-events: auto;
+}
+
+/* ── Scene camera hint ── */
+
+.scene-camera-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-faint);
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  user-select: none;
+  text-align: right;
+  line-height: 1.45;
+}
+
+.scene-camera-hint strong {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Scene controls (glass HUD) ── */
+
+.scene-controls {
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.scene-controls .control-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  padding: 0.35rem;
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+}
+
+.scene-controls button,
+.scene-controls select {
+  border: 1px solid var(--color-border-strong);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.scene-controls button {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+}
+
+.scene-controls button:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.scene-controls button.active {
+  background: var(--color-active);
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.scene-controls select {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--color-text);
+  background-color: rgba(0, 0, 0, 0.75);
+  padding-right: 1.75rem;
+}
+
+/* ── Flight controls (glass HUD) ── */
+
+.flight-controls {
+  bottom: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+  transition: padding 0.25s ease;
+}
+
+.flight-controls--collapsed {
+  left: auto;
+  right: 0.75rem;
+  width: auto;
+  min-width: 2.5rem;
+  padding: 0.35rem 0.5rem;
+  align-items: center;
+}
+
+.flight-controls--collapsed .panel-collapse-btn--down {
+  position: static;
+}
+
+.panel-collapse-btn {
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.panel-collapse-btn:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.panel-collapse-btn--side {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 20;
+  width: 1.5rem;
+  height: 3rem;
+  font-size: 0.85rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  transform: translate(100%, -50%);
+}
+
+.sidebar--collapsed .panel-collapse-btn--side {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(100%, -50%);
+  height: 3rem;
+}
+
+.panel-collapse-btn--down {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.85rem;
+}
+
+.flight-controls:not(.flight-controls--collapsed) .flight-controls-row:first-of-type {
+  padding-right: 2rem;
+}
+
+.flight-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flight-controls-row.timeline-row {
+  width: 100%;
+}
+
+.flight-controls-label,
+.timeline-date-label {
+  color: var(--color-text-faint);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.timeline-date-label {
+  min-width: auto;
+}
+
+.timeline-range-row {
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+}
+
+.timeline-range-row .timeline-date-label {
+  flex-shrink: 0;
+}
+
+.timeline-range-row input[type="datetime-local"] {
+  flex: 1 1 9rem;
+  min-width: 9rem;
+}
+
+.flight-controls input[type="datetime-local"] {
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.timeline-utc {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+}
+
+.timeline-slider {
+  flex: 1;
+  min-width: 120px;
+  height: 2px;
+  accent-color: var(--color-accent);
+}
+
+.timeline-range-hint {
+  width: 100%;
+  color: var(--color-text-faint);
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+}
+
+.flight-controls h3 {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-right: 0.25rem;
+}
+
+.flight-controls button {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.flight-controls button:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.flight-controls button.active {
+  background: var(--color-active);
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.flight-controls .multiplier-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* ── Section headings ── */
+
+.mission-form h2,
+.trajectory-toggles h3,
+.porkchop-plot h3,
+.trajectory-hud h4 {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+/* ── Forms ── */
+
+.picker-row,
+.toggle-row,
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.picker-row label,
+.checkbox-row label {
+  width: 110px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+.picker-row select,
+.picker-row input[type="date"],
+.mission-form select,
+.mission-form input[type="date"] {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.picker-row select,
+.mission-form select {
+  padding-right: 1.75rem;
+}
+
+.checkbox-row input[type="checkbox"] {
+  accent-color: var(--color-accent);
+}
+
+.hint {
+  font-size: 0.7rem;
+  color: var(--color-text-faint);
+  margin-top: 0.25rem;
+}
+
+.mission-form button[type="submit"] {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.7rem;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: opacity var(--transition);
+}
+
+.mission-form button[type="submit"]:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.mission-form button[type="submit"]:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Banners ── */
+
+.warning-banner,
+.error-banner {
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.warning-banner {
+  background: rgba(255, 180, 100, 0.06);
+  border: 1px solid rgba(255, 180, 100, 0.2);
+  color: var(--color-warning);
+}
+
+.error-banner {
+  background: rgba(255, 100, 100, 0.06);
+  border: 1px solid rgba(255, 100, 100, 0.2);
+  color: var(--color-error);
+}
+
+.vehicle-hint,
+.mode-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  margin: 0.25rem 0 0;
+  line-height: 1.4;
+}
+
+/* ── Metrics ── */
+
+.metric-limit {
+  color: var(--color-text-faint);
+  font-size: 0.8em;
+}
+
+.metric-over-budget {
+  color: var(--color-error);
+}
+
+/* ── Progress ── */
+
+.calculation-progress {
+  width: 100%;
+}
+
+.progress-bar {
+  position: relative;
+  height: 2px;
+  background: var(--color-border);
+  border-radius: 1px;
+  overflow: visible;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.25s ease-out;
+}
+
+.progress-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Trajectory toggles ── */
+
+.color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.toggle-row label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+/* ── Trajectory HUD ── */
+
+.trajectory-hud {
+  background: transparent;
+  padding: 0;
+}
+
+.trajectory-hud dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1rem;
+  font-size: 0.8rem;
+}
+
+.trajectory-hud dt {
+  color: var(--color-text-faint);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.trajectory-hud dd {
+  color: var(--color-text);
+}
+
+.leg-metrics-list {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: disc;
+}
+
+.leg-metrics-list li {
+  margin-bottom: 0.15rem;
+}
+
+/* ── Porkchop plot ── */
+
+.porkchop-plot {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.porkchop-placeholder {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-faint);
+  font-size: 0.8rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.hover-info {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.multiplier-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.multiplier-buttons button {
+  padding: 0.3rem 0.55rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.multiplier-buttons button:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.multiplier-buttons button.active {
+  background: var(--color-active);
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Focus states ── */
+
+button:focus-visible,
+.link-btn:focus-visible,
+.panel-collapse-btn:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
+/* ── Driver.js tour overrides ── */
+
+.driver-popover.starpath-tour {
+  background: var(--color-surface-elevated) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+  font-family: var(--font-sans) !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-title {
+  font-size: 0.7rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--color-text) !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-description {
+  font-size: 0.8rem !important;
+  color: var(--color-text-muted) !important;
+  line-height: 1.5 !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-progress-text {
+  font-size: 0.65rem !important;
+  color: var(--color-text-faint) !important;
+  letter-spacing: 0.06em !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-navigation-btns {
+  gap: 0.5rem !important;
+}
+
+.driver-popover.starpath-tour button {
+  background: transparent !important;
+  color: var(--color-text-muted) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.65rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  transition: color var(--transition), border-color var(--transition) !important;
+}
+
+.driver-popover.starpath-tour button:hover {
+  color: var(--color-text) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  background: transparent !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-close-btn {
+  color: var(--color-text-faint) !important;
+  border: none !important;
+}
+
+.driver-popover.starpath-tour .driver-popover-arrow-side-left.driver-popover-arrow,
+.driver-popover.starpath-tour .driver-popover-arrow-side-right.driver-popover-arrow,
+.driver-popover.starpath-tour .driver-popover-arrow-side-top.driver-popover-arrow,
+.driver-popover.starpath-tour .driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-color: var(--color-surface-elevated) !important;
+}
