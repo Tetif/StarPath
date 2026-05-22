@@ -6,14 +6,15 @@ Demo: [https://www.youtube.com/watch?v=1G7M-L6jR2Y](https://www.youtube.com/watc
 
 ## Screenshots
 
-  
-
-
-  
-
-
-  
-
+<p align="left">
+  <img src="docs/screenshots/main-ui.png" width="900">
+</p>
+<p align="left">
+  <img src="docs/screenshots/mission-starship-mars.png" width="900">
+</p>
+<p align="left">
+  <img src="docs/screenshots/solar-system-trajectories.png" width="900">
+</p>
 
 ## Features
 
